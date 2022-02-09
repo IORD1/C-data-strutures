@@ -1,3 +1,5 @@
+//added this coment to check working of git
+
 #include<iostream>
 using namespace std;
 
