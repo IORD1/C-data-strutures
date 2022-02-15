@@ -28,6 +28,48 @@ Node* searchInBst(Node* root, int key){
     return searchInBst(root->right, key);
 }
 
+Node* inorderSucc(Node* root){
+    Node* curr = root;
+    while(curr && curr->left != NULL){
+        curr = curr->left;
+    }
+    return curr;
+}
+
+Node* deleteInBst(Node* root , int key){
+
+    if(key < root->data){
+        root->left = deleteInBst(root->left, key);
+    }
+    else if(key > root->data){
+        root->right = deleteInBst(root->right , key);
+    }else{
+        if(root->left == NULL){
+            Node* temp = root->right;
+            free(root);
+            return temp;
+        }
+        else if(root->right == NULL){
+            Node* temp = root->left;
+            free(root);
+            return temp;
+        }
+        //case 3
+        Node* temp = inorderSucc(root->right);
+        root->data = temp->data;
+        root->right = deleteInBst(root->right, temp->data);
+    }
+    return root;
+}
+
+void inorder(Node* root){
+    if(root == NULL){
+        return ;
+    }
+    inorder(root->left);
+    cout<<root->data<< " ";
+    inorder(root->right);
+}
 
 int main(){
     Node *root = new Node(4);
@@ -49,5 +91,10 @@ int main(){
     }else{
         cout<<"key exist"<<endl;
     }
+
+    inorder(root);
+    cout<<endl;
+    root = deleteInBst(root, 2);
+    inorder(root);
     return 0;
 }
